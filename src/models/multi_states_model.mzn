@@ -7,7 +7,6 @@ array[1..n, 1..m] of 0..1: current;
 
 % The predecessor configurations to compute (1 means live, 0 means dead)
 array[1..steps, 1..n, 1..m] of var 0..1: previous;
-array[1..steps, 1..n, 1..m] of var 0..8: lives;
 
 % Helper functions to count the number of neighbours of a cell that are alive
 function var int: live_neighbours_prev(int: i, int: j, int: s) =
@@ -27,34 +26,32 @@ function var int: live_neighbours_curr(int: i, int: j) =
 
 constraint
     forall(i in 1..n, j in 1..m) (
-      lives[steps, i, j] == live_neighbours_prev(i, j, steps) /\
       (current[i, j] == 1 <-> % if the current cell is alive
       (
-        (previous[steps, i, j] == 1  /\ (lives[steps, i, j] == 2 \/ lives[steps, i, j] == 3)) \/ %it was alive and with only 2 or 3 live neighbours
-        (previous[steps, i, j] == 0  /\ lives[steps, i, j] == 3) %it was dead and with exactly 3 neighbours
+        (previous[steps, i, j] == 1  /\ (live_neighbours_prev(i, j, steps) == 2 \/ live_neighbours_prev(i, j, steps) == 3)) \/ %it was alive and with only 2 or 3 live neighbours
+        (previous[steps, i, j] == 0  /\ live_neighbours_prev(i, j, steps) == 3) %it was dead and with exactly 3 neighbours
       ))
      /\
      (current[i, j] == 0 <-> % if the current cell is dead
      (
-        (previous[steps, i, j] == 1  /\ (lives[steps, i, j] < 2 \/ lives[steps, i, j] > 3)) \/  %it was alive but with less than 2 or more than 3 live neighbours
-        (previous[steps, i, j] == 0  /\ lives[steps, i, j] != 3) %it was dead but didn't had 3 neighbours
+        (previous[steps, i, j] == 1  /\ (live_neighbours_prev(i, j, steps) < 2 \/ live_neighbours_prev(i, j, steps) > 3)) \/  %it was alive but with less than 2 or more than 3 live neighbours
+        (previous[steps, i, j] == 0  /\ live_neighbours_prev(i, j, steps) != 3) %it was dead but didn't had 3 neighbours
      ))
     );
 
 % Applying Conway's Game of Life rules to relate the previous states
 constraint
     forall(i in 1..n, j in 1..m, s in 1..steps-1) (
-      lives[s, i, j] == live_neighbours_prev(i, j, s) /\
       (previous[s+1, i, j] == 1 <-> % if the current cell is alive
       (
-        (previous[s, i, j] == 1  /\ (lives[s, i, j] == 2 \/ lives[s, i, j] == 3)) \/ %it was alive and with only 2 or 3 live neighbours
-        (previous[s, i, j] == 0  /\ lives[s, i, j] == 3) %it was dead and with exactly 3 neighbours
+        (previous[s, i, j] == 1  /\ (live_neighbours_prev(i, j, s) == 2 \/ live_neighbours_prev(i, j, s) == 3)) \/ %it was alive and with only 2 or 3 live neighbours
+        (previous[s, i, j] == 0  /\ live_neighbours_prev(i, j, s) == 3) %it was dead and with exactly 3 neighbours
       ))
      /\
      (previous[s+1, i, j] == 0 <-> % if the current cell is dead
      (
-        (previous[s, i, j] == 1  /\ (lives[s, i, j] < 2 \/ lives[s, i, j] > 3)) \/  %it was alive but with less than 2 or more than 3 live neighbours
-        (previous[s, i, j] == 0  /\ lives[s, i, j] != 3) %it was dead but didn't had 3 neighbours
+        (previous[s, i, j] == 1  /\ (live_neighbours_prev(i, j, s) < 2 \/ live_neighbours_prev(i, j, s) > 3)) \/  %it was alive but with less than 2 or more than 3 live neighbours
+        (previous[s, i, j] == 0  /\ live_neighbours_prev(i, j, s) != 3) %it was dead but didn't had 3 neighbours
      ))
     );
 

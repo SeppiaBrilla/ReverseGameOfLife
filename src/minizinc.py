@@ -31,6 +31,7 @@ class SingleStateModel:
         if time_limit is not None:
             command += ["--time-limit", str(time_limit)]
 
+        command += ["-p", '12']
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.decode("utf-8")
 
         if "=====UNSATISFIABLE=====" in result:
@@ -72,6 +73,7 @@ class MultiStateModel:
 
         if time_limit is not None:
             command += ["--time-limit", str(time_limit)]
+        command += ["-p", '12']
 
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).stdout.decode("utf-8")
 
