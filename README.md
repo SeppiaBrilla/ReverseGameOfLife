@@ -4,12 +4,12 @@ This project implements the Reverse Game of Life (Reverse GoL), which involves d
 
 #### Overview of Conway's Game of Life
 The Game of Life (GoL), created by John Conway, is a well-known cellular automaton that transitions states based on four simple rules:
-1. Any live cell with fewer than 2 live neighbors dies.
-2. Any live cell with more than 3 live neighbors dies.
-3. Any live cell with 2 or 3 live neighbors remains alive.
-4. Any dead cell with exactly 3 live neighbors becomes alive.
+1. Any live cell with fewer than 2 live neighbours dies.
+2. Any live cell with more than 3 live neighbours dies.
+3. Any live cell with 2 or 3 live neighbours remains alive.
+4. Any dead cell with exactly 3 live neighbours becomes alive.
 
-These rules make computing the next state straightforward: every state has a single successor, and a next state always exists. However, the reverse is not true: given a state \( s \), finding a previous state is not guaranteed, and there may be multiple possible predecessors. 
+These rules make computing the next state straightforward: every state has a single successor, and the next state always exists. However, the reverse is not true: given a state \( s \), finding a previous state is not guaranteed, and there may be multiple possible predecessors. 
 
 For example, the following 3x3 grid has no valid previous states because no configuration generates it:
 
@@ -20,9 +20,9 @@ Conversely, a completely blank grid (all cells dead) could have several predeces
 #### Defining the Reverse GoL Problem
 The Reverse GoL problem is the challenge of finding a state that, after \( N \) steps, evolves into a desired state \( s \), where \( N \) is defined by the user.
 
-This problem is naturally combinatorial and can be addressed using constraint programming as well as SAT techniques. THree approaches can be considered:
+This problem is naturally combinatorial and can be addressed using constraint programming as well as SAT techniques. Three approaches can be considered:
 1. **Full-sequence modeling:** Represent the entire sequence of \( N \) backward steps in a single model.
-2. **Stepwise modeling:** Use a constraint model to compute one step back at a time and repeat the process \( N-1 \) times.
+2. **Stepwise modelling:** Use a constraint model to compute one step back at a time and repeat the process \( N-1 \) times.
 3. **SAT Model** Similar to the **Full-sequence modeling:** but implemented using SAT.
 
 #### Stepwise Model and Solution Search
@@ -34,7 +34,7 @@ The stepwise model requires a strategy to explore the solution space due to the 
 This exploration continues until either a valid solution is identified or all options are exhausted.
 
 #### Eliminating Unnecessary Solutions
-An additional constraint is added to simplify the search: if a 3x3 section of a state is entirely blank, the center cell could have been alive or dead in the previous state without affecting the outcome. To avoid generating redundant solutions, a rule ensures that if a cell has no living neighbors in the next state, it must also be dead in the previous state.
+An additional constraint is added to simplify the search: if a 3x3 section of a state is entirely blank, the centre cell could have been alive or dead in the previous state without affecting the outcome. To avoid generating redundant solutions, a rule ensures that if a cell has no living neighbours in the next state, it must also be dead in the previous state.
 
 This constraint helps reduce the solution space by excluding scenarios where cells are too distant to interact meaningfully with others.
 
@@ -42,7 +42,7 @@ This constraint helps reduce the solution space by excluding scenarios where cel
 The implementation uses [Minizinc](https://www.minizinc.org/) to model and solve the problem. There is also a python interface that allows to call the models via a web app and to write the DFS code needed for the single state model. 
 
 ### Execution
-To launch the web app, install the python dependencies via ```pip -r requirements.txt``` and then execute the ```app.py``` script. The webpage will be available at https://localhost:5000.
+To launch the web app, install the python dependencies via ```pip -r requirements.txt``` and then execute the ```app.py``` script. The webpage will be available at https://127.0.0.1:5000.
 
 An example execution is (the GIF cuts the time needed to search for the solution):
 <img src="img/example.gif" alt="example" width="600"/>
