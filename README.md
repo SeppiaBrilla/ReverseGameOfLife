@@ -1,6 +1,6 @@
 ### Reversing the Game of Life
 
-This project implements the Reverse Game of Life (Reverse GoL), which involves determining a previous state \( s' \) that evolves into a given state \( s \) after \( N \) steps of Conway’s Game of Life. Mathematically, this is expressed as \( next(s', N) = s \), where \( next(o, n) \) computes the state of the Game of Life after \( n \) steps starting from state \( o \), and \( N \) specifies the number of steps to reverse. This project provides two distinct models to address this problem, along with a web app for visualizing the process.
+This project implements the Reverse Game of Life (Reverse GoL), which involves determining a previous state \( s' \) that evolves into a given state \( s \) after \( N \) steps of Conway’s Game of Life. Mathematically, this is expressed as \( next(s', N) = s \), where \( next(o, n) \) computes the state of the Game of Life after \( n \) steps starting from state \( o \), and \( N \) specifies the number of steps to reverse. This project provides three distinct models to address this problem, along with a web app for visualizing the process.
 
 #### Overview of Conway's Game of Life
 The Game of Life (GoL), created by John Conway, is a well-known cellular automaton that transitions states based on four simple rules:
@@ -20,9 +20,10 @@ Conversely, a completely blank grid (all cells dead) could have several predeces
 #### Defining the Reverse GoL Problem
 The Reverse GoL problem is the challenge of finding a state that, after \( N \) steps, evolves into a desired state \( s \), where \( N \) is defined by the user.
 
-This problem is naturally combinatorial and can be addressed using constraint programming techniques. Two approaches can be considered:
+This problem is naturally combinatorial and can be addressed using constraint programming as well as SAT techniques. THree approaches can be considered:
 1. **Full-sequence modeling:** Represent the entire sequence of \( N \) backward steps in a single model.
 2. **Stepwise modeling:** Use a constraint model to compute one step back at a time and repeat the process \( N-1 \) times.
+3. **SAT Model** Similar to the **Full-sequence modeling:** but implemented using SAT.
 
 #### Stepwise Model and Solution Search
 The stepwise model requires a strategy to explore the solution space due to the lack of guaranteed predecessors for any given state. This project employs a depth-first search (DFS) approach:
@@ -42,3 +43,6 @@ The implementation uses [Minizinc](https://www.minizinc.org/) to model and solve
 
 ### Execution
 To launch the web app, install the python dependencies via ```pip -r requirements.txt``` and then execute the ```app.py``` script. The webpage will be available at https://localhost:5000.
+
+An example execution is (the GIF cuts the time needed to search for the solution):
+<img src="img/example.gif" alt="example" width="600"/>

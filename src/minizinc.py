@@ -2,7 +2,7 @@ import subprocess
 import json
 
 class SingleStateModel:
-    MODEL = "./cp_models/single_state_model.mzn"
+    MODEL = "src/models/single_state_model.mzn"
 
     def make_instance(self, board: list[list[int]], instance_name:str) -> None:
         n = len(board)
@@ -44,7 +44,7 @@ class SingleStateModel:
             raise Exception(result)
 
 class MultiStateModel:
-    MODEL = "./cp_models/multi_states_model.mzn"
+    MODEL = "src/models/multi_states_model.mzn"
 
     def make_instance(self, board: list[list[int]], number_of_states:int, instance_name:str) -> None:
         n = len(board)
