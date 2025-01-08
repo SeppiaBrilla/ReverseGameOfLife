@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from models.sat_model import reverse_gol
 from minizinc import SingleStateModel, MultiStateModel
 from gol import forward
 import os
@@ -33,6 +34,18 @@ def multi_states_solve(board:list[list[int]], max_steps:int) -> tuple[list[list[
     
     return solutions, len(solutions) > 0
 
+def sat_model(board, max_step):
+    solutions, sat = reverse_gol(board, max_step)
+    if not sat:
+        return [], False
+    for step in range(len(solutions)):
+        if step == len(solutions) - 1:
+            assert forward(solutions[step]) == board, "the board is not consistent"
+        else:
+            assert forward(solutions[step]) == solutions[step + 1], "the board is not consistent"
+    
+    return [solutions], True
+
 app = Flask(__name__)
 
 # Root endpoint
@@ -55,6 +68,8 @@ def process_matrix():
             solver = depth_first_search
         elif method == "multi":
             solver = multi_states_solve
+        elif method == "SAT":
+            solver = sat_model
             
         solution, success = solver(state, steps)
         
