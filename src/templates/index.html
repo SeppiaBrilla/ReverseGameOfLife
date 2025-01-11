@@ -68,10 +68,10 @@
                     [-1,  0],          [1,  0],
                     [-1, -1], [0, -1], [1, -1]]
 
-            cols = board[0].length
-            rows = board.length
+            cols = board.length;
+            rows = board[0].length;
 
-            new_board = Array.from({ length: rows }, () => Array(cols).fill(0));
+            new_board = Array.from({ length: cols }, () => Array(rows).fill(0));
 
             for(let i = 0; i < cols; i ++){
                 for(let j = 0; j < rows; j ++){
@@ -79,16 +79,16 @@
                     for(let  e = 0; e < neibs.length; e++){
                         let h = neibs[e][0];
                         let w = neibs[e][1];
+                        console.log(current_neib, board)
                         if(i + h < cols && j + w < rows && i + h > -1 && j + w > -1){
-                            current_neib += board[i + h][j + w]
+                            current_neib += board[i + h][j + w];
                         }
-                        console.log(current_neib)
                     }
-                    new_board[i][j] = get_next_state(board[i][j], current_neib)
+                    new_board[i][j] = get_next_state(board[i][j], current_neib);
                 }
             }
                    
-            return new_board
+            return new_board;
         }
 
         function next(){
@@ -96,10 +96,9 @@
             clearMatrix();
             const rows = parseInt(document.getElementById("rows").value);
             const columns = parseInt(document.getElementById("columns").value);
-            console.log(next_state)
             for(let i = 0; i < rows; i++){
                 for(let j = 0; j < columns; j++){
-                    if(next_state[i][j] == 1){
+                    if(next_state[j][i] == 1){
                         toggleButton(i,j);
                     }
                 }
@@ -112,8 +111,8 @@
             const container = document.getElementById("matrix-container");
 
             container.innerHTML = '';
-            Matrix = Array.from({ length: rows }, () => Array(columns).fill(0));
-            buttons = Array.from({ length: rows }, () => Array(columns).fill(null));
+            Matrix = Array.from({ length: columns }, () => Array(rows).fill(0));
+            buttons = Array.from({ length: columns }, () => Array(rows).fill(null));
 
             container.style.gridTemplateRows = `repeat(${rows}, 20px)`;
             container.style.gridTemplateColumns = `repeat(${columns}, 20px)`;
@@ -123,15 +122,15 @@
                     const button = document.createElement("button");
                     button.classList.add("button");
                     button.onclick = () => toggleButton(i, j);
-                    buttons[i][j] = button;
+                    buttons[j][i] = button;
                     container.appendChild(button);
                 }
             }
         }
 
         function toggleButton(row, col) {
-            buttons[row][col].classList.toggle("black");
-            Matrix[row][col] = Matrix[row][col] == 0 ? 1 : 0;
+            buttons[col][row].classList.toggle("black");
+            Matrix[col][row] = Matrix[col][row] == 0 ? 1 : 0;
             console.log(`Matrix at (${row}, ${col}) is now ${Matrix[row][col]}`);
             console.log(Matrix);
         }
@@ -162,6 +161,7 @@
                     const columns = parseInt(document.getElementById("columns").value);
                     if (!data["success"]){
                         alert("no solution found");
+                        return;
                     }
                     clearMatrix();
                     for(let i = 0; i < rows; i++){
